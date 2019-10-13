@@ -1,0 +1,12 @@
+rootProject.name = 'saimiri'
+include 'gfx'
+include 'base'
+
+def prefix(prefix) {
+    rootProject.name = prefix
+    rootProject.children.each { it.name = "${prefix}-${it.name}" }
+}
+
+prefix('saimiri')
+
+include ':examples:simpleDeferredLighting'

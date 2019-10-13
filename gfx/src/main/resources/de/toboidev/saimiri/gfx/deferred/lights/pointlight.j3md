@@ -1,0 +1,18 @@
+MaterialDef Base Test {
+  MaterialParameters {
+        Color Color
+        Texture2D GNormal
+        Texture2D GDiffuse
+        Float Height
+  }
+  Technique {
+    VertexShader GLSL110 : de/toboidev/saimiri/gfx/deferred/lights/pointlight.vert
+    FragmentShader GLSL110 : de/toboidev/saimiri/gfx/deferred/lights/pointlight.frag
+        WorldParameters {
+            WorldViewProjectionMatrix
+            ViewProjectionMatrix
+            ViewMatrix
+            Resolution
+        }
+  }
+}

@@ -1,0 +1,29 @@
+MaterialDef Base Test {
+    MaterialParameters {
+        Texture2D Diffuse
+        Texture2D Normal
+        Texture2D Glow
+    }
+    Technique {
+    VertexShader GLSL100 : de/toboidev/saimiri/gfx/base.vert
+    FragmentShader GLSL100 : de/toboidev/saimiri/gfx/unshaded.frag
+        WorldParameters {
+            WorldViewProjectionMatrix
+            ViewProjectionMatrix
+            ViewMatrix
+        }
+    }
+    Technique GBuffer{
+        VertexShader GLSL100 : de/toboidev/saimiri/gfx/base.vert
+        FragmentShader GLSL100 : de/toboidev/saimiri/gfx/deferred/gbuffer.frag
+        WorldParameters {
+            WorldViewProjectionMatrix
+            ViewProjectionMatrix
+            ViewMatrix
+        }
+        Defines {
+            HAS_GLOWMAP : Glow
+            HAS_NORMALMAP : Normal
+        }
+    }
+}

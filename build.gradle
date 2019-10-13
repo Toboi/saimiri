@@ -1,0 +1,35 @@
+project.ext.jme3 = [v: '3.3.0-alpha1', g: 'org.jmonkeyengine']
+project.ext.zayes = [v: '1.3.1']
+project.ext.sio2 = [v: '1.3.0']
+
+subprojects {
+    apply plugin: "java"
+
+    group 'de.toboidev'
+    version '1.0-SNAPSHOT'
+
+    sourceCompatibility = 1.7
+
+    repositories {
+        jcenter()
+        maven { url "https://dl.bintray.com/jmonkeyengine/org.jmonkeyengine/" }
+    }
+    dependencies {
+
+        //jME
+        compile "${jme3.g}:jme3-core:${jme3.v}"
+
+        // https://mvnrepository.com/artifact/com.simsilica/zay-es
+        compile group: 'com.simsilica', name: 'zay-es', version: "${zayes.v}"
+
+        // https://mvnrepository.com/artifact/com.simsilica/sio2
+        compile group: 'com.simsilica', name: 'sio2', version: "${sio2.v}"
+
+
+    }
+    buildDir = new File(rootProject.projectDir, "build/" + project.name)
+
+    compileJava {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
