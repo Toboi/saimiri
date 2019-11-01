@@ -6,21 +6,21 @@ import com.simsilica.es.PersistentComponent;
 /**
  * @author Eike Foede <toboi@toboidev.de>
  */
-public class Scale implements PersistentComponent {
+public class Size implements PersistentComponent {
     public final float x;
     public final float y;
 
-    public Scale(float x, float y) {
+    public Size(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public Scale(float scale) {
+    public Size(float scale) {
         this.x = scale;
         this.y = scale;
     }
 
-    public Scale() {
+    public Size() {
         x = 1;
         y = 1;
     }

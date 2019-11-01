@@ -12,7 +12,7 @@ import com.simsilica.es.EntityId;
 import de.toboidev.saimiri.es.EntityDataProvider;
 import de.toboidev.saimiri.es.components.Position;
 import de.toboidev.saimiri.es.components.Rotation;
-import de.toboidev.saimiri.es.components.Scale;
+import de.toboidev.saimiri.es.components.Size;
 import de.toboidev.saimiri.gfx.components.RenderComponent;
 import de.toboidev.saimiri.gfx.components.SpriteComponent;
 import de.toboidev.saimiri.gfx.render.spriteloaders.DefaultSpriteLoader;
@@ -130,7 +130,7 @@ public class SpriteRenderState extends BaseAppState {
 
     private class RenderContainer extends EntityContainer<Spatial> {
         @SuppressWarnings("unchecked") RenderContainer(EntityData ed) {
-            super(ed, SpriteComponent.class, RenderComponent.class, Position.class, Rotation.class, Scale.class);
+            super(ed, SpriteComponent.class, RenderComponent.class, Position.class, Rotation.class, Size.class);
         }
 
         @Override protected Spatial addObject(Entity e) {
@@ -154,7 +154,7 @@ public class SpriteRenderState extends BaseAppState {
         @Override protected void updateObject(Spatial spatial, Entity e) {
             Position position = e.get(Position.class);
             Rotation rotation = e.get(Rotation.class);
-            Scale scale = e.get(Scale.class);
+            Size size = e.get(Size.class);
             RenderComponent renderComponent = e.get(RenderComponent.class);
 
             //Translation
@@ -164,7 +164,7 @@ public class SpriteRenderState extends BaseAppState {
             spatial.setLocalRotation(rotation.asQuaternion());
 
             //Scale
-            spatial.setLocalScale(scale.asVector());
+            spatial.setLocalScale(size.asVector());
         }
 
         @Override protected void removeObject(Spatial spatial, Entity e) {
