@@ -15,10 +15,10 @@ import de.toboidev.saimiri.gfx.deferred.Light;
 
 public class PointLight implements Light {
     private ColorRGBA lightColor = ColorRGBA.White;
-    private Spatial spatial;
+    private final Spatial spatial;
     private float radius = 1;
     private float height = 1.5f;
-    private Material material;
+    private final Material material;
     private Vector3f position = Vector3f.ZERO;
 
     public PointLight(AssetManager assetManager) {

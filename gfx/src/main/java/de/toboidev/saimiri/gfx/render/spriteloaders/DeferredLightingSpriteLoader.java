@@ -1,6 +1,7 @@
 package de.toboidev.saimiri.gfx.render.spriteloaders;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.material.Material;
 
 /**
@@ -18,12 +19,12 @@ public class DeferredLightingSpriteLoader extends DefaultSpriteLoader {
         try {
             String normalSearchPath = baseTexture.replaceAll("\\.(\\w+)$", "-normal.$1");
             material.setTexture("Normal", assetManager.loadTexture(normalSearchPath));
-        } catch (Exception ex) {
+        } catch (AssetNotFoundException ex) {
         }
         try {
             String glowSearchPath = baseTexture.replaceAll("\\.(\\w+)$", "-glow.$1");
             material.setTexture("Glow", assetManager.loadTexture(glowSearchPath));
-        } catch (Exception ex) {
+        } catch (AssetNotFoundException ex) {
         }
     }
 }

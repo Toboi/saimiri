@@ -15,7 +15,7 @@ import de.toboidev.saimiri.gfx.deferred.lights.PointLight;
  * @author Eike Foede <toboi@toboidev.de>
  */
 public class LightSystem extends BaseAppState {
-    private DeferredLightingProcessor dp;
+    private final DeferredLightingProcessor dp;
     private PointLightContainer pointLightContainer;
     private AssetManager assetManager;
 

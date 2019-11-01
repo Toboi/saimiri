@@ -24,7 +24,7 @@ public class CameraControllerState extends BaseAppState {
     public static final float FRUSTUM_NEAR = -1000;
     public static final float FRUSTUM_FAR = 1000;
 
-    private Map<String, Camera> cameras = new HashMap<>();
+    private final Map<String, Camera> cameras = new HashMap<>();
     private CameraContainer container;
 
     @Override protected void initialize(Application app) {

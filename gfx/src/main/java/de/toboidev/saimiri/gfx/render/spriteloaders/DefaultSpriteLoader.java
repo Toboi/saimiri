@@ -13,14 +13,14 @@ import de.toboidev.saimiri.gfx.render.SpriteLoader;
  * @author Eike Foede <toboi@toboidev.de>
  */
 public class DefaultSpriteLoader implements SpriteLoader {
-    private AssetManager assetManager;
+    private final AssetManager assetManager;
 
     public DefaultSpriteLoader(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
     public void setTexture(String baseTexture, AssetManager assetManager, Material material) {
-        material.setTexture("Diffuse", assetManager.loadTexture(baseTexture));
+        material.setTexture("Color", assetManager.loadTexture(baseTexture));
     }
 
     @Override public Spatial loadSprite(String name) {

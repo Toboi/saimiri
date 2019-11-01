@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.simsilica.es.Entity;
 import com.simsilica.es.EntityContainer;
 import com.simsilica.es.EntityData;
@@ -13,24 +14,31 @@ import de.toboidev.saimiri.es.components.Position;
 import de.toboidev.saimiri.es.components.Rotation;
 import de.toboidev.saimiri.es.components.Scale;
 import de.toboidev.saimiri.gfx.components.RenderComponent;
+import de.toboidev.saimiri.gfx.components.SpriteComponent;
 import de.toboidev.saimiri.gfx.render.spriteloaders.DefaultSpriteLoader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Eike Foede <toboi@toboidev.de>
  */
-public class StaticRenderState extends BaseAppState {
+public class SpriteRenderState extends BaseAppState {
 
     private static final String USERDATA_EID_KEY = "entityId";
     private RenderContainer container;
-    private Node rootNode;
+    private final Node rootNode;
     private SpriteLoader spriteLoader;
 
-    public StaticRenderState(Node rootNode) {
+    private final HashMap<EntityId, ArrayList<Control>> pendingControls;
+
+    public SpriteRenderState(Node rootNode) {
         this.rootNode = rootNode;
+        pendingControls = new HashMap<>();
     }
 
-    public StaticRenderState(Node rootNode, SpriteLoader spriteLoader) {
-        this.rootNode = rootNode;
+    public SpriteRenderState(Node rootNode, SpriteLoader spriteLoader) {
+        this(rootNode);
         this.spriteLoader = spriteLoader;
     }
 
@@ -59,10 +67,13 @@ public class StaticRenderState extends BaseAppState {
     }
 
     /**
-     * @param eId
+     * @param eId The entity for which the spatial should be retrieved.
      * @return The Spatial that is representing the entity with the given id, if there is one, otherwise null.
      */
     public Spatial getSpatial(EntityId eId) {
+        if (container == null) {
+            return null;
+        }
         return container.getObject(eId);
     }
 
@@ -70,7 +81,7 @@ public class StaticRenderState extends BaseAppState {
      * Returns the id of the entity that this spatial is representing.
      * Returns EntityId.NULL_ID if there is no corresponding Entity.
      *
-     * @param spatial
+     * @param spatial The spatial to which the entity should be found.
      * @return Id of the Entity corresponding to the spatial or EntityId.NULL_ID if no Entity is found.
      */
     public EntityId getEntityId(Spatial spatial) {
@@ -84,15 +95,57 @@ public class StaticRenderState extends BaseAppState {
         return EntityId.NULL_ID;
     }
 
-    class RenderContainer extends EntityContainer<Spatial> {
+    /**
+     * Attach a Control to the spatial representing the given Entity. If no spatial has been created for this entity,
+     * the attachment is deferred until a spatial gets created for this entity.
+     *
+     * @param eId     The id of the entity.
+     * @param control The control to attach
+     */
+    public void attachControl(EntityId eId, Control control) {
+        Spatial spatial = getSpatial(eId);
+        if (spatial != null) {
+            spatial.addControl(control);
+        } else {
+            ArrayList<Control> controlList = pendingControls.get(eId);
+            if (controlList == null) {
+                controlList = new ArrayList<>();
+                pendingControls.put(eId, controlList);
+            }
+            controlList.add(control);
+        }
+    }
+
+    public void removeControl(EntityId eId, Control control) {
+        Spatial spatial = getSpatial(eId);
+        if (spatial != null) {
+            spatial.removeControl(control);
+        } else {
+            ArrayList<Control> controlList = pendingControls.get(eId);
+            if (controlList != null) {
+                controlList.remove(control);
+            }
+        }
+    }
+
+    private class RenderContainer extends EntityContainer<Spatial> {
         @SuppressWarnings("unchecked") RenderContainer(EntityData ed) {
-            super(ed, StaticSprite.class, RenderComponent.class, Position.class, Rotation.class, Scale.class);
+            super(ed, SpriteComponent.class, RenderComponent.class, Position.class, Rotation.class, Scale.class);
         }
 
         @Override protected Spatial addObject(Entity e) {
-            StaticSprite sprite = e.get(StaticSprite.class);
+            SpriteComponent sprite = e.get(SpriteComponent.class);
             Spatial spatial = spriteLoader.loadSprite(sprite.sprite);
+
             spatial.setUserData(USERDATA_EID_KEY, e.getId().getId());
+
+            if (pendingControls.containsKey(e.getId())) {
+                for (Control c : pendingControls.get(e.getId())) {
+                    spatial.addControl(c);
+                }
+                pendingControls.remove(e.getId());
+            }
+
             rootNode.attachChild(spatial);
             updateObject(spatial, e);
             return spatial;

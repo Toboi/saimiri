@@ -1,6 +1,6 @@
 MaterialDef Base Test {
     MaterialParameters {
-        Texture2D Diffuse
+        Texture2D Color
         Texture2D Normal
         Texture2D Glow
     }

@@ -22,17 +22,17 @@ import java.util.List;
 
 public class DeferredLightingProcessor implements SceneProcessor {
 
-    private static int renderBufferSamples = 1;
+    private final static int renderBufferSamples = 1;
     private static Node lightScene;
     private FrameBuffer gBuffer;
     private Texture2D color;
     private Texture2D normal;
     private Texture2D glow;
-    private List<Light> lights;
+    private final List<Light> lights;
     private ViewPort lightViewPort;
     private ColorRGBA ambientLight = ColorRGBA.White.mult(0.1f);
     private Geometry ambientAndGlowRenderTarget;
-    private AssetManager assetManager;
+    private final AssetManager assetManager;
     private RenderManager renderManager;
 
     private FrameBuffer tempBuffer;
@@ -45,11 +45,11 @@ public class DeferredLightingProcessor implements SceneProcessor {
         lights = new ArrayList<>();
     }
 
-    public boolean addLight(Light light) {
+    public void addLight(Light light) {
         light.setGBufferColor(color);
         light.setGBufferNormal(normal);
         lightScene.attachChild(light.getSpatial());
-        return lights.add(light);
+        lights.add(light);
     }
 
     public boolean removeLight(Light l) {

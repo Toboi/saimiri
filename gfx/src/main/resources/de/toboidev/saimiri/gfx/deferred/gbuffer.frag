@@ -1,4 +1,4 @@
-uniform sampler2D m_Diffuse;
+uniform sampler2D m_Color;
 uniform sampler2D m_Glow;
 uniform sampler2D m_Normal;
 varying vec2 texCoord;
@@ -6,7 +6,7 @@ varying vec2 texCoord;
 
 void main(){
 
-    vec4 color = texture2D(m_Diffuse, texCoord);
+    vec4 color = texture2D(m_Color, texCoord);
     gl_FragData[0] = color;
 
     #ifdef HAS_NORMALMAP
