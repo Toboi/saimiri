@@ -1,8 +1,9 @@
 MaterialDef Base Test {
     MaterialParameters {
-        Texture2D Color
-        Texture2D Normal
-        Texture2D Glow
+        Texture2D ColorMap
+        Texture2D NormalMap
+        Texture2D GlowMap
+        Color Color
     }
     Technique {
     VertexShader GLSL100 : de/toboidev/saimiri/gfx/base.vert
@@ -11,6 +12,10 @@ MaterialDef Base Test {
             WorldViewProjectionMatrix
             ViewProjectionMatrix
             ViewMatrix
+        }
+        Defines {
+            HAS_COLOR : Color
+            HAS_COLORMAP : ColorMap
         }
     }
     Technique GBuffer{
@@ -22,8 +27,10 @@ MaterialDef Base Test {
             ViewMatrix
         }
         Defines {
-            HAS_GLOWMAP : Glow
-            HAS_NORMALMAP : Normal
+            HAS_COLOR : Color
+            HAS_COLORMAP : ColorMap
+            HAS_GLOWMAP : GlowMap
+            HAS_NORMALMAP : NormalMap
         }
     }
 }

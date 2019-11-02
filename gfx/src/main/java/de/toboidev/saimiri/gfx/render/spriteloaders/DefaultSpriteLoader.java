@@ -20,7 +20,7 @@ public class DefaultSpriteLoader implements SpriteLoader {
     }
 
     public void setTexture(String baseTexture, AssetManager assetManager, Material material) {
-        material.setTexture("Color", assetManager.loadTexture(baseTexture));
+        material.setTexture("ColorMap", assetManager.loadTexture(baseTexture));
     }
 
     @Override public Spatial loadSprite(String name) {
