@@ -1,0 +1,38 @@
+if (findProperty('BINTRAY_USER') != null) {
+    bintray {
+        user = property('BINTRAY_USER')
+        key = property('BINTRAY_KEY')
+        publish = true
+        pkg {
+            repo = "saimiri"
+            name = project.name
+            licenses = ["MIT"]
+            vcsUrl = "https://github.com/Toboi/saimiri/"
+            publications = ['SaimiriPublish']
+            desc = project.description
+        }
+    }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    publishing {
+        publications {
+            SaimiriPublish(MavenPublication) {
+                from components.java
+                groupId project.group
+                artifactId project.name
+                artifact sourcesJar
+                artifact javadocJar
+                version project.version
+            }
+        }
+    }
+}

@@ -1,3 +1,9 @@
 dependencies {
     compile project(":saimiri-base")
 }
+
+version "0.0.1"
+
+description "Rendering-related systems for 2D games and a deferred lighting processor"
+
+apply from: "../release.gradle"

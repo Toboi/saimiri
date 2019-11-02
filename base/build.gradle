@@ -1,0 +1,4 @@
+version "0.0.1"
+
+description "Common classes and components used by other saimiri modules"
+apply from: "../release.gradle"
