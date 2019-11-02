@@ -1,0 +1,12 @@
+apply plugin: "java"
+apply plugin: "application"
+
+application {
+    mainClassName = 'de.toboidev.saimiri.examples.simpleCollision.Main'
+}
+
+dependencies {
+    compile project(":saimiri-game")
+    compile "${jme3.g}:jme3-desktop:${jme3.v}"
+    compile "${jme3.g}:jme3-lwjgl3:${jme3.v}"
+}
