@@ -6,7 +6,7 @@ MaterialDef Base Test {
         Float Height
   }
   Technique {
-    VertexShader GLSL110 : de/toboidev/saimiri/gfx/deferred/lights/pointlight.vert
+    VertexShader GLSL110 : de/toboidev/saimiri/gfx/base.vert
     FragmentShader GLSL110 : de/toboidev/saimiri/gfx/deferred/lights/pointlight.frag
         WorldParameters {
             WorldViewProjectionMatrix

@@ -4,6 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
@@ -22,7 +23,7 @@ public class PointLight implements Light {
     private Vector3f position = Vector3f.ZERO;
 
     public PointLight(AssetManager assetManager) {
-        Mesh q = createQuad();
+        Mesh q = createCircleApproximation(8);
         spatial = new Geometry("PointLight", q);
         material = new Material(assetManager, "de/toboidev/saimiri/gfx/deferred/lights/pointlight.j3md");
         material.setFloat("Height", height);
@@ -70,26 +71,50 @@ public class PointLight implements Light {
         material.setTexture("GNormal", texture);
     }
 
-    private Mesh createQuad() {
+    private Mesh createCircleApproximation(int numSlices) {
+        if (numSlices < 3) {
+            throw new IllegalArgumentException("Can only generate circle approximations with at least 3 slices");
+        }
+
+        float anglePerSlice = FastMath.TWO_PI / numSlices;
+        float hypothenuse = 1 / FastMath.cos(anglePerSlice / 2.0f);
+
+        float[] positionBuffer = new float[(numSlices + 1) * 3];
+        float[] texCoordBuffer = new float[(numSlices + 1) * 2];
+
+        //Center vertex
+        positionBuffer[0] = 0;
+        positionBuffer[1] = 0;
+        positionBuffer[2] = 0;
+        texCoordBuffer[0] = 0;
+        texCoordBuffer[1] = 0;
+
+        for (int i = 0; i < numSlices; i++) {
+            float angle = anglePerSlice * (i + 0.5f);
+            float x = FastMath.cos(angle) * hypothenuse;
+            float y = FastMath.sin(angle) * hypothenuse;
+            positionBuffer[(i + 1) * 3] = x;
+            positionBuffer[(i + 1) * 3 + 1] = y;
+            positionBuffer[(i + 1) * 3 + 2] = 0;
+            texCoordBuffer[(i + 1) * 2] = x;
+            texCoordBuffer[(i + 1) * 2 + 1] = y;
+        }
+
+
+        int[] indexBuffer = new int[(numSlices) * 3];
+
+        for (int i = 0; i < numSlices; i++) {
+            indexBuffer[i * 3] = 0;
+            indexBuffer[i * 3 + 1] = i + 1;
+            indexBuffer[i * 3 + 2] = (i + 1) % numSlices + 1;
+        }
+
         Mesh m = new Mesh();
         float extent = 1;
-        m.setBuffer(VertexBuffer.Type.Position, 3, new float[]{
-                -extent, -extent, 0,
-                -extent, extent, 0,
-                extent, extent, 0,
-                extent, -extent, 0
-        });
+        m.setBuffer(VertexBuffer.Type.Position, 3, positionBuffer);
 
-        m.setBuffer(VertexBuffer.Type.TexCoord, 2, new float[]{
-                0, 0,
-                0, 1,
-                1, 1,
-                1, 0
-        });
-        m.setBuffer(VertexBuffer.Type.Index, 3, new short[]{
-                0, 2, 1,
-                0, 3, 2
-        });
+        m.setBuffer(VertexBuffer.Type.TexCoord, 2, texCoordBuffer);
+        m.setBuffer(VertexBuffer.Type.Index, 3, indexBuffer);
         m.updateBound();
         m.setStatic();
         return m;

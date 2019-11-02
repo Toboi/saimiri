@@ -11,11 +11,11 @@ void main(){
 
     vec2 screenPosition = vec2(gl_FragCoord) / vec2(g_Resolution.x, g_Resolution.y);
 
-    vec3 lightDir = normalize(vec3(1.0, 1.0, m_Height) - vec3(texCoord, 0.0));
+    vec3 lightDir = normalize(vec3(-texCoord, m_Height));
 
     vec3 normal = normalize(texture2D(m_GNormal, screenPosition).xyz*2.0-1.0);
 
-    float dist = distance(texCoord, vec2(1.0, 1.0));
+    float dist = length(texCoord);
 
     float f = dot(lightDir, normal);
 
