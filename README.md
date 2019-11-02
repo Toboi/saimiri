@@ -3,7 +3,9 @@ Collection of utilities for writing 2D games with the [jMonkeyEngine](https://gi
 ## Gradle
 ```groovy
 repositories {
-    jcenter()
+    maven {
+        url "https://dl.bintray.com/toboi/saimiri"
+    }
 }
 dependencies {
     compile 'de.toboidev:saimiri-base:0.0.1'
