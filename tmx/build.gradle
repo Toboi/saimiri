@@ -1,0 +1,9 @@
+dependencies {
+	compile project(":saimiri-gfx")
+	compile project(":saimiri-game")
+	compile project(":saimiri-tmx:TiledReader")
+}
+
+project(':saimiri-tmx:TiledReader') {
+	apply plugin: 'java'
+}

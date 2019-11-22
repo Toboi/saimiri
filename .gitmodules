@@ -1,0 +1,3 @@
+[submodule "tmx/TiledReader"]
+	path = tmx/TiledReader
+	url = git@github.com:AlexHeyman/TiledReader.git

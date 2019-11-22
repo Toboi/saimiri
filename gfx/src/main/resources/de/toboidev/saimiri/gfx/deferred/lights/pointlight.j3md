@@ -1,7 +1,7 @@
 MaterialDef Base Test {
   MaterialParameters {
         Color Color
-        Texture2D GNormal
+        Texture2D GNormal -LINEAR
         Texture2D GDiffuse
         Float Height
   }

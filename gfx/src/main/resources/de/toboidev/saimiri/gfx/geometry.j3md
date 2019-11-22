@@ -1,7 +1,7 @@
 MaterialDef Base Test {
     MaterialParameters {
         Texture2D ColorMap
-        Texture2D NormalMap
+        Texture2D NormalMap -LINEAR
         Texture2D GlowMap
         Color Color
     }
