@@ -7,6 +7,7 @@ public class World {
     private final ArrayList<StaticBody> staticBodies = new ArrayList<>();
     private final ArrayList<DynamicBody> dynamicBodies = new ArrayList<>();
     private final ArrayList<WorldTickListener> tickListeners = new ArrayList<>();
+    private final ArrayList<CollisionListener> collisionListeners = new ArrayList<>();
     public double COLLISION_WIDTH = 0.0001f;
 
     /**
@@ -19,14 +20,27 @@ public class World {
      */
     double requestMovement(DynamicBody body, double distance, boolean horizontal) {
 
+        StaticBody blocker = null;
         if (distance > 0) {
             for (StaticBody obstructor : staticBodies) {
-                distance = Math.min(distance, obstructor.limitMovement(body, distance, horizontal));
+                double blockedDistance = obstructor.limitMovement(body, distance, horizontal);
+                if (blockedDistance < distance) {
+                    distance = blockedDistance;
+                    blocker = obstructor;
+                }
             }
         } else {
-
             for (StaticBody obstructor : staticBodies) {
-                distance = Math.max(distance, obstructor.limitMovement(body, distance, horizontal));
+                double blockedDistance = obstructor.limitMovement(body, distance, horizontal);
+                if (blockedDistance > distance) {
+                    distance = blockedDistance;
+                    blocker = obstructor;
+                }
+            }
+        }
+        if (blocker != null) {
+            for (CollisionListener listener : collisionListeners) {
+                listener.collision(body, blocker);
             }
         }
         body.changePosition(distance, horizontal);
@@ -73,5 +87,13 @@ public class World {
 
     public void removeTickListener(WorldTickListener tickListener) {
         tickListeners.remove(tickListener);
+    }
+
+    public void addCollisionListener(CollisionListener collisionListener) {
+        collisionListeners.add(collisionListener);
+    }
+
+    public void removeCollisionListener(CollisionListener collisionListener) {
+        collisionListeners.remove(collisionListener);
     }
 }
