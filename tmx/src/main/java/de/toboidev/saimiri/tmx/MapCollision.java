@@ -21,7 +21,7 @@ public class MapCollision {
                 if (layer instanceof TiledTileLayer) {
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            tm.tileBlocking[x][y] = ((TiledTileLayer) layer).getTile(x, height - 1 - y) != null;
+                            tm.tileBlocking[x][y] |= ((TiledTileLayer) layer).getTile(x, height - 1 - y) != null;
                         }
                     }
                 }
