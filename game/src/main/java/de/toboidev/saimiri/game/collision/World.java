@@ -38,7 +38,7 @@ public class World {
                 }
             }
         }
-        if (blocker != null) {
+        if (blocker != null && (blocker.isCollisionResponseEnabled() && body.isCollisionResponseEnabled())) {
             for (CollisionListener listener : collisionListeners) {
                 listener.collision(body, blocker);
             }

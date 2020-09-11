@@ -4,12 +4,12 @@ package de.toboidev.saimiri.game.collision;
  * A dynamic, moving body.
  * Has a collision shape of a box
  */
-public class DynamicBody {
+public class DynamicBody extends PhysicsBody{
 
     private final double width;
     private final double height;
-    private World world;
     private DynamicBodyController controller;
+
     //Current position (Center)
     private double x;//Horizontal
     private double y;//Vertical
@@ -23,10 +23,6 @@ public class DynamicBody {
 
     public DynamicBody(double width, double height) {
         this(width, height, 0, 0);
-    }
-
-    void setWorld(World world) {
-        this.world = world;
     }
 
     public void forceX(double x) {
