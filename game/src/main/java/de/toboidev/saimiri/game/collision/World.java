@@ -19,31 +19,47 @@ public class World {
      * @return The actually traveled distance
      */
     double requestMovement(DynamicBody body, double distance, boolean horizontal) {
+        class potentialCollision {
+            StaticBody body;
+            double distance;
 
-        StaticBody blocker = null;
-        if (distance > 0) {
-            for (StaticBody obstructor : staticBodies) {
-                double blockedDistance = obstructor.limitMovement(body, distance, horizontal);
-                if (blockedDistance < distance) {
-                    distance = blockedDistance;
-                    blocker = obstructor;
-                }
+            public potentialCollision(StaticBody body, double distance) {
+                this.body = body;
+                this.distance = distance;
             }
-        } else {
-            for (StaticBody obstructor : staticBodies) {
-                double blockedDistance = obstructor.limitMovement(body, distance, horizontal);
-                if (blockedDistance > distance) {
+        }
+
+        ArrayList<potentialCollision> potentialCollisionEvents = new ArrayList<>();
+
+        //Find all potentially colliding StaticBodies and calculate actual movement distance
+        for (StaticBody obstructor : staticBodies) {
+            double blockedDistance = obstructor.limitMovement(body, distance, horizontal);
+
+            //Check for collision
+            if (Math.abs(blockedDistance) <= Math.abs(distance)) {
+
+                //The movement is only limited when both bodies have collision enabled
+                if (body.isCollisionEnabled() && obstructor.isCollisionEnabled()) {
                     distance = blockedDistance;
-                    blocker = obstructor;
+                }
+
+                potentialCollisionEvents.add(new potentialCollision(obstructor, blockedDistance));
+            }
+        }
+
+        //Now that we know how far the DynamicBody will be moving,
+        //filter the potential collisions for the actual ones and notify CollisionListeners
+        if (body.isCollisionEventsEnabled()) {
+            for (potentialCollision c : potentialCollisionEvents) {
+                if (Math.abs(c.distance) <= Math.abs(distance) && c.body.isCollisionEventsEnabled()) {
+                    notifyCollisionListeners(body, c.body);
                 }
             }
         }
-        if (blocker != null && (blocker.isCollisionResponseEnabled() && body.isCollisionResponseEnabled())) {
-            for (CollisionListener listener : collisionListeners) {
-                listener.collision(body, blocker);
-            }
-        }
+
+        //Actually move the DynamicBody
         body.changePosition(distance, horizontal);
+
         return distance;
     }
 
@@ -95,5 +111,11 @@ public class World {
 
     public void removeCollisionListener(CollisionListener collisionListener) {
         collisionListeners.remove(collisionListener);
+    }
+
+    private void notifyCollisionListeners(DynamicBody dynamicBody, StaticBody staticBody) {
+        for (CollisionListener listener : collisionListeners) {
+            listener.collision(dynamicBody, staticBody);
+        }
     }
 }
