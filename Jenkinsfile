@@ -3,7 +3,7 @@ pipeline {
 	stages {
 		stage('Build on openJDK 8') {
 			agent {
-				docker { image 'openjdk:8-alpine' }
+				docker { image 'openjdk:8' }
 			}
 			steps {
 				sh './gradlew build'
@@ -11,7 +11,7 @@ pipeline {
 		}
 		stage('Build on openJDK 11') {
 			agent {
-				docker { image 'openjdk:11-alpine' }
+				docker { image 'openjdk:11' }
 			}
 			steps {
 				sh './gradlew build'
