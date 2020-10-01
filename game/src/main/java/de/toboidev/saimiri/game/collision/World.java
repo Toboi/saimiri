@@ -77,6 +77,26 @@ public class World {
         }
     }
 
+    public void addBody(PhysicsBody body) {
+        if (body instanceof DynamicBody) {
+            addBody((DynamicBody) body);
+        } else if (body instanceof StaticBody) {
+            addBody((StaticBody) body);
+        } else {
+            throw new IllegalArgumentException("Only DynamicBodies and StaticBodies are allowed!");
+        }
+    }
+
+    public void removeBody(PhysicsBody body) {
+        if (body instanceof DynamicBody) {
+            removeBody((DynamicBody) body);
+        } else if (body instanceof StaticBody) {
+            removeBody((StaticBody) body);
+        } else {
+            throw new IllegalArgumentException("Only DynamicBodies and StaticBodies are allowed!");
+        }
+    }
+
     public void addBody(DynamicBody body) {
         body.setWorld(this);
         dynamicBodies.add(body);
