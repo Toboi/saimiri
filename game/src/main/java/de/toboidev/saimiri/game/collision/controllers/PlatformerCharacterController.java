@@ -39,7 +39,8 @@ public class PlatformerCharacterController extends DynamicBodyController {
         this.gravity = gravity;
     }
 
-    @Override public void tick(float tpf) {
+    @Override
+    public void tick(float tpf) {
 
         //Horizontal movement
         //The current horizontal speed
@@ -58,14 +59,20 @@ public class PlatformerCharacterController extends DynamicBodyController {
         }
         double requestedMovement = upSpeed * tpf;
         double actualMovement = body.requestMovement(requestedMovement, false);
-        if (actualMovement != requestedMovement) {
+        if (actualMovement > requestedMovement) {
+            //Hitting floor
             onGround = true;
+            upSpeed = -gravity * tpf;
+        } else if (actualMovement < requestedMovement) {
+            //Hitting ceiling
+            onGround = false;
             upSpeed = -gravity * tpf;
         } else {
             upSpeed -= gravity * tpf;
             onGround = false;
         }
     }
+
 
     public void setMoveLeft(boolean move) {
         left = move;
