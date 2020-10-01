@@ -40,7 +40,7 @@ public class MapRenderer
                 {
                     Node layerNode = generateNode(tileLayer);
                     //TODO: Make layer offset somehow configurable. What happens when other game objects should be between layers?
-                    layerNode.setLocalTranslation(-map.getTileWidth() / 2.0f, ((float) (map.getWidth()) - 1.5f) * map.getTileHeight(), i - 1000);
+                    layerNode.setLocalTranslation(-map.getTileWidth() / 2.0f, ((float) (map.getHeight()) - 1.5f) * map.getTileHeight(), i - 1000);
                     mapNode.attachChild(layerNode);
                 }
             }
