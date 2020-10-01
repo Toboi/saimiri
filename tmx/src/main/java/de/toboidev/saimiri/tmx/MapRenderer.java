@@ -108,6 +108,7 @@ public class MapRenderer
         tk.setGenerateMips(false);
         Texture t = assetManager.loadTexture(tk);
         t.setMagFilter(Texture.MagFilter.Nearest);
+        t.setMinFilter(Texture.MinFilter.NearestNoMipMaps);
         mat.setTexture("ColorMap", t);
         try
         {
@@ -116,6 +117,7 @@ public class MapRenderer
             tk.setGenerateMips(false);
             t = assetManager.loadTexture(tk);
             t.setMagFilter(Texture.MagFilter.Nearest);
+            t.setMinFilter(Texture.MinFilter.NearestNoMipMaps);
             mat.setTexture("NormalMap", t);
         } catch (Exception e)
         {
