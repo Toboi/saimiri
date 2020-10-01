@@ -36,7 +36,7 @@ public class World {
             double blockedDistance = obstructor.limitMovement(body, distance, horizontal);
 
             //Check for collision
-            if (Math.abs(blockedDistance) <= Math.abs(distance)) {
+            if (Math.abs(blockedDistance) < Math.abs(distance)) {
 
                 //The movement is only limited when both bodies have collision enabled
                 if (body.isCollisionEnabled() && obstructor.isCollisionEnabled()) {
