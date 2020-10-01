@@ -70,6 +70,12 @@ public class MapRenderer
             incX = -1;
         }
 
+        if(endX <= startX)
+        {
+            //This layer contains no tiles
+            return n;
+        }
+
         int startY = layer.getY1();
         int endY = layer.getY2() + 1;
         int incY = 1;
