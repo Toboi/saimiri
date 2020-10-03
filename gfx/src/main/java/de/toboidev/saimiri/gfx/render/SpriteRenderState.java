@@ -158,7 +158,7 @@ public class SpriteRenderState extends BaseAppState {
             RenderComponent renderComponent = e.get(RenderComponent.class);
 
             //Translation
-            spatial.setLocalTranslation(position.asVector(renderComponent.layer));
+            spatial.setLocalTranslation(position.asVector3f(renderComponent.layer));
 
             //Rotation
             spatial.setLocalRotation(rotation.asQuaternion());
