@@ -17,7 +17,25 @@ public class StaticBox extends StaticBody {
         maxY = y + height / 2.0f;
     }
 
-    @Override public double limitMovement(DynamicBody body, double distance, boolean horizontal) {
+
+    public double getX() {
+        return (minX + maxX) / 2.0;
+    }
+
+    public double getY() {
+        return (minY + maxY) / 2.0;
+    }
+
+    public double getWidth() {
+        return maxX - minX;
+    }
+
+    public double getHeight() {
+        return maxY - minY;
+    }
+
+    @Override
+    public double limitMovement(DynamicBody body, double distance, boolean horizontal) {
         double startPos = body.getPosition(horizontal);
         startPos += distance > 0 ? body.getExtent(horizontal) : -body.getExtent(horizontal);
 
