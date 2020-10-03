@@ -58,9 +58,9 @@ public class MapRenderer
 
         Node n = new Node(layer.getName());
 
-        int startX = layer.getX1();
-        int endX = layer.getX2() + 1;
-        int incX = 1;
+        int startX;
+        int endX;
+        int incX;
 
         if(renderOrder == TiledMap.RenderOrder.LEFT_DOWN || renderOrder == TiledMap.RenderOrder.LEFT_UP)
         {
@@ -68,12 +68,24 @@ public class MapRenderer
             startX = layer.getX2();
             endX = layer.getX1()-1;
             incX = -1;
-        }
 
-        if(endX <= startX)
+            if(endX >= startX)
+            {
+                //This layer contains no tiles
+                return n;
+            }
+        }
+        else
         {
-            //This layer contains no tiles
-            return n;
+            startX = layer.getX1();
+            endX = layer.getX2() + 1;
+            incX = 1;
+
+            if(endX <= startX)
+            {
+                //This layer contains no tiles
+                return n;
+            }
         }
 
         int startY = layer.getY1();
