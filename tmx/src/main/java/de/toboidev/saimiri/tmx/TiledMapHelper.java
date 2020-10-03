@@ -1,6 +1,7 @@
 package de.toboidev.saimiri.tmx;
 
 import com.jme3.math.FastMath;
+import com.jme3.math.Vector2f;
 import de.toboidev.saimiri.es.components.Position;
 import de.toboidev.saimiri.es.components.Rotation;
 import de.toboidev.saimiri.game.collision.staticbodies.TileMap;
@@ -36,10 +37,10 @@ public class TiledMapHelper {
         return tm;
     }
 
-    public static Position getObjectPosition(TiledMap map, TiledObject obj) {
+    public static Vector2f getObjectPosition(TiledMap map, TiledObject obj) {
 
-        float halfWidth = obj.getWidth()/2.0f;
-        float halfHeight = obj.getHeight()/2.0f;
+        float halfWidth = obj.getWidth() / 2.0f;
+        float halfHeight = obj.getHeight() / 2.0f;
         float x = obj.getX();
         float y = obj.getY();
         y = (map.getHeight() - 1) * map.getTileHeight() - y;
@@ -53,7 +54,7 @@ public class TiledMapHelper {
         x = x + cos * halfWidth - sin * halfHeight;
         y = y - sin * halfWidth - cos * halfHeight;
 
-        return new Position(x, y);
+        return new Vector2f(x, y);
     }
 
     public static Rotation getObjectRotation(TiledObject obj) {
