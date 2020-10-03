@@ -38,7 +38,6 @@ public class TiledLoader extends TiledReader implements AssetLoader {
         if (!folder.isEmpty()) {
             returnPath = folder + relativePath;
         }
-        System.out.println(returnPath);
         return returnPath;
     }
 
