@@ -4,11 +4,13 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import de.toboidev.saimiri.es.components.Position;
 import de.toboidev.saimiri.es.components.Rotation;
+import de.toboidev.saimiri.game.collision.StaticBody;
+import de.toboidev.saimiri.game.collision.staticbodies.StaticBox;
 import de.toboidev.saimiri.game.collision.staticbodies.TileMap;
-import org.tiledreader.TiledLayer;
-import org.tiledreader.TiledMap;
-import org.tiledreader.TiledObject;
-import org.tiledreader.TiledTileLayer;
+import org.tiledreader.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TiledMapHelper {
 
@@ -28,7 +30,35 @@ public class TiledMapHelper {
                 if (layer instanceof TiledTileLayer) {
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            tm.tileBlocking[x][y] |= ((TiledTileLayer) layer).getTile(x, height - 1 - y) != null;
+                            TiledTile tile = ((TiledTileLayer) layer).getTile(x, height - 1 - y);
+
+                            //No tile means no collision
+                            if (tile == null) {
+                                tm.tileBlocking[x][y] = TileMap.TileShape.EMPTY;
+                                continue;
+                            }
+
+                            List<TiledObject> collisionObjects = tile.getCollisionObjects();
+                            //We assume that the complete tile is blocking if no custom shapes have been defined
+                            if (collisionObjects.isEmpty()) {
+                                tm.tileBlocking[x][y] = TileMap.TileShape.FILLED;
+                                continue;
+                            }
+
+                            tm.tileBlocking[x][y] = TileMap.TileShape.CUSTOM;
+                            ArrayList<StaticBody> colliders = new ArrayList<>();
+                            for (TiledObject obj : collisionObjects) {
+                                if (obj.getShape() == TiledObject.Shape.RECTANGLE || obj.getRotation() != 0) {
+                                    Vector2f position = getObjectPosition(map, obj);
+                                    position.addLocal(x * map.getTileWidth(), (y + 1 - map.getHeight()) * map.getTileHeight());
+                                    StaticBox box = new StaticBox(position.x, position.y, obj.getWidth(), obj.getHeight());
+                                    colliders.add(box);
+                                } else {
+                                    throw new UnsupportedOperationException("Only axis aligned rectangle collision shapes are supported!");
+                                }
+                            }
+                            tm.customShapes[x][y] = colliders;
+
                         }
                     }
                 }

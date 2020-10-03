@@ -3,7 +3,7 @@ package de.toboidev.saimiri.game.collision;
 public abstract class PhysicsBody {
     protected World world;
 
-    void setWorld(World world) {
+    public void setWorld(World world) {
         this.world = world;
     }
 
